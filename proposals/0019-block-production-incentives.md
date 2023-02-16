@@ -27,17 +27,16 @@ Because of the skewed scales between block rewards and inflationary rewards (and
 
 Measuring block production purely by blocks produced vs skipped without consideration for CUs
 
-## New Terminology
-
-- Validator CU Ceiling (VCUC) (the maximum CUs a validator could have packed in an epoch, measured by total leader slots * block CU limit)
-- Epoch Compute Units Processed (ECUP) (sum of CUs packed in all blocks produced)
-- Validator CU ratio (VCUR) (ECUP / VCUC)
-- Block Production Grace Slots (BPGS) (fixed number of slots a validator may skip before being penalized, e.g. 32 - this protects low-staked validators)
-
 ## Detailed Design
 
 1. While replaying a block tally the CUs and increment a counter in the vote account, similar to the credits counter.
 2. During rewards calculation currently the validator's epoch credits are stake-weighted to obtain "points" which are used to apportion the total epoch inflation to the validator's stake accounts. We propose the addition of another multiplier to this weighting by adding in the VCUR as a weighting.
+3. While CUs are a second order factor of stake, and thus could ostensibly replace stake weight as a factor in points calculation, there are many validators with no or few leader slots, where this would result in a multiplier of 0 and thus no rewards, despite some small amount of stake.
+4. There needs to be some normalization to work against, an expected value of CUs per block, this can be a magic constant for now as it is applied equally to all validators. The validator's ratio of mean CU/leader slot vs expected CU/leader slot becomes their points multiplier.
+
+Current formula
+
+$$V_I = E_I * E_C * V_S$$
 
 The vote account needs to be modified to allow for the storage of the ECUP value, this value could be an integer measuring tens of billions, possibly hundreds of billions, the value could be divided by 1,000 or 100,000 to allow a smaller data structure to be used.
 
