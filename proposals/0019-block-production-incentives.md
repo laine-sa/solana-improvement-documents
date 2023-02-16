@@ -36,7 +36,7 @@ Measuring block production purely by blocks produced vs skipped without consider
 
 Current formula
 
-$$V_Rewards = E_Inflation * [(E_Credits * V_Stake) / (C_Credits * C_Stake)]$$
+$$V_{Rewards} = E_{Inflation} * [(E_{Credits} * V_{Stake}) / (C_{Credits} * C_{Stake})]$$
 
 where $V$ = validator, $E$ = Epoch, $C$ = Cluster
 
