@@ -34,11 +34,15 @@ Measuring block production purely by blocks produced vs skipped without consider
 3. While CUs are a second order factor of stake, and thus could ostensibly replace stake weight as a factor in points calculation, there are many validators with no or few leader slots, where this would result in a multiplier of 0 and thus no rewards, despite some small amount of stake.
 4. There needs to be some normalization to work against, an expected value of CUs per block, this can be a magic constant for now as it is applied equally to all validators. The validator's ratio of mean CU/leader slot vs expected CU/leader slot becomes their points multiplier.
 
-Current formula
+### Current formula
 
 $$V_{Rewards} = E_{Inflation} * [(V_{Credits} * V_{Stake}) / (C_{Credits} * C_{Stake})]$$
 
-where $V$ = validator, $E$ = Epoch, $C$ = Cluster
+_where $V$ = validator, $E$ = Epoch, $C$ = Cluster_
+
+### Proposed formula
+
+$$V_{Rewards} = E_{Inflation} * [(V_{Credits} * V_{CUMultiple} * V_{Stake}) / (C_{Credits} * C_{CUMultiple} * C_{Stake})]$$
 
 The vote account needs to be modified to allow for the storage of the ECUP value, this value could be an integer measuring tens of billions, possibly hundreds of billions, the value could be divided by 1,000 or 100,000 to allow a smaller data structure to be used.
 
