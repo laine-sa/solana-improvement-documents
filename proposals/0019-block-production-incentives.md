@@ -36,7 +36,9 @@ Measuring block production purely by blocks produced vs skipped without consider
 
 Current formula
 
-$$V_I = E_I * E_C * V_S$$
+$$V_Rewards = E_Inflation * [(E_Credits * V_Stake) / (C_Credits * C_Stake)]$$
+
+where $V$ = validator, $E$ = Epoch, $C$ = Cluster
 
 The vote account needs to be modified to allow for the storage of the ECUP value, this value could be an integer measuring tens of billions, possibly hundreds of billions, the value could be divided by 1,000 or 100,000 to allow a smaller data structure to be used.
 
