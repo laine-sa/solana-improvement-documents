@@ -44,11 +44,13 @@ _where $V$ = validator, $E$ = Epoch, $C$ = Cluster_
 
 $$V_{Rewards} = E_{Inflation} * [(V_{Credits} * V_{CUMultiple} * V_{Stake}) / (C_{Credits} * C_{CUMultiple} * C_{Stake})]$$
 
-The vote account needs to be modified to allow for the storage of the ECUP value, this value could be an integer measuring tens of billions, possibly hundreds of billions, the value could be divided by 1,000 or 100,000 to allow a smaller data structure to be used.
+_where $V$ = validator, $E$ = Epoch, $C$ = Cluster_
+
+The vote account needs to be modified to allow for the storage of the cumulative CU value, this value could be an integer measuring tens of billions, possibly hundreds of billions, the value could be divided by 1,000 or 100,000 to allow a smaller data structure to be used.
 
 The benefit of this design is that there is no modification to the rewards calculation other than the formula for points calculation.
 
-The maximum penalty derived from this value should be capped to 10% of rewards initially, i.e. a validator can lose up to 10% of their inflationary rewards (and their stakers consequently) per epoch, but not more. Stake already accrued is never lost and stakers will always earn at least 90% of the rewards they would earn. With time this percentage share of rewards can be changed as needed.
+To prevent excessive penalty from this change there should be a hard floor and ceiling to the value of $V_{CUMultiple}$, e.g. 0.9 and 1.1. For validators with no leader slots it should be automatically set to 1. Possibly even for those with few leader slots (less than 128 for example).
 
 ## Impact
 
@@ -56,7 +58,9 @@ Validators
 
 ## Security Considerations
 
-Need to ensure this doesn't lead to rewards that exceed 100% or fall below 90% of what validators would receive currently, and can't be gamed, e.g. by packing self-transfers into blocks to boost CUs.
+- Need to ensure this can't be gamed, e.g. by packing self-transfers into blocks to boost CUs. 
+- Shouldn't excessively penalize validators who have few leader slots and experience higher variance as a result.
+- Validators could delay block propagation to cause the next leader's blocks to be skipped and thus trigger a penalty on them
 
 ## Drawbacks *(Optional)*
 
